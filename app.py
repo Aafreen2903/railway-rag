@@ -10,12 +10,68 @@ from langchain_core.output_parsers import StrOutputParser
 
 
 # ================= API KEY =================
+# ⚠️ RECOMMENDED: move this to Streamlit Secrets later
 os.environ["GOOGLE_API_KEY"] = "AIzaSyCnmlWHnf-f3DxyPHmN4Qa8KB9M6_1dYQM"
 
 
-# ================= STREAMLIT =================
-st.set_page_config(page_title="Railway Passenger Explainer")
-st.title("🚆 Railway Passenger Process Explainer Bot")
+# ================= STREAMLIT CONFIG =================
+st.set_page_config(
+    page_title="Railway Passenger Explainer",
+    page_icon="🚆",
+    layout="centered"
+)
+
+# ================= CUSTOM HTML + CSS =================
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(to right, #f8f9fa, #eef2f7);
+}
+
+.main-card {
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.title {
+    text-align: center;
+    font-size: 34px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.answer-card {
+    background: #f9fafb;
+    padding: 18px;
+    border-left: 6px solid #2563eb;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+div.stButton > button {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 16px;
+    border: none;
+}
+div.stButton > button:hover {
+    background-color: #1e40af;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 # ================= CACHE: VECTOR DB =================
@@ -36,7 +92,7 @@ def load_vector_db():
 @st.cache_resource
 def load_llm():
     return ChatGoogleGenerativeAI(
-        model="gemini-3-flash-preview",
+        model="gemini-3-flash-preview",   # safer model
         temperature=0.2
     )
 
@@ -86,16 +142,59 @@ rag_chain = (
 
 
 # ================= UI =================
+st.markdown("""
+<div class="main-card">
+    <div class="title">🚆 Railway Passenger Process Explainer</div>
+    <div class="subtitle">
+        Clear answers generated only from official railway documents
+    </div>
+""", unsafe_allow_html=True)
+
+st.markdown("#### 💬 Ask your question")
+
 question = st.text_input(
-    "Ask a railway-related question:",
+    "",
     placeholder="e.g. What are the rules for changing boarding point?"
 )
 
 if st.button("Ask"):
     if question.strip():
-        with st.spinner("Fetching answer from documents..."):
+        with st.spinner("🔍 Fetching answer from railway documents..."):
             answer = rag_chain.invoke(question)
-            st.success("Answer")
-            st.write(answer)
+
+        st.markdown(f"""
+        <div class="answer-card">
+            {answer}
+        </div>
+        """, unsafe_allow_html=True)
     else:
         st.warning("Please enter a question.")
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+
+# ================= SIDEBAR =================
+st.sidebar.markdown("""
+### ℹ️ About
+This AI assistant explains **railway passenger processes**
+using document-based retrieval (RAG).
+
+❌ No ticket booking  
+❌ No live schedules  
+✅ Official documents only  
+
+---
+### 🛠 Tech Stack
+- Streamlit  
+- LangChain  
+- ChromaDB  
+- Gemini API  
+""")
+
+# ================= FOOTER =================
+st.markdown("""
+<hr>
+<p style="text-align:center; color:gray; font-size:13px;">
+Built with ❤️ using Streamlit & Gemini
+</p>
+""", unsafe_allow_html=True)
