@@ -24,52 +24,117 @@ st.set_page_config(
 # ================= CUSTOM HTML + CSS =================
 st.markdown("""
 <style>
+
+/* ========== BACKGROUND LIGHTS ========== */
 .stApp {
-    background: linear-gradient(to right, #f8f9fa, #eef2f7);
+    background:
+        radial-gradient(circle at top left, rgba(99,102,241,0.18), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(14,165,233,0.18), transparent 40%),
+        linear-gradient(to right, #f8fafc, #eef2ff);
 }
 
+/* ========== MAIN GLASS CARD ========== */
 .main-card {
-    background: white;
-    padding: 28px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(18px);
+    padding: 36px;
+    border-radius: 26px;
+    box-shadow:
+        0 30px 65px rgba(0,0,0,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.45);
+    animation: slideFade 0.8s ease;
 }
 
+/* Hover glow */
+.main-card:hover {
+    box-shadow:
+        0 35px 75px rgba(99,102,241,0.35),
+        0 0 45px rgba(99,102,241,0.30);
+}
+
+/* ========== TITLE ========== */
 .title {
     text-align: center;
-    font-size: 34px;
-    font-weight: 700;
-    color: #1f2937;
+    font-size: 40px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glowText 2.5s infinite alternate;
 }
 
+/* Subtitle */
 .subtitle {
     text-align: center;
-    color: #6b7280;
+    color: #475569;
     font-size: 16px;
-    margin-bottom: 25px;
+    margin: 12px 0 30px;
 }
 
-.answer-card {
-    background: #f9fafb;
-    padding: 18px;
-    border-left: 6px solid #2563eb;
-    border-radius: 10px;
-    margin-top: 15px;
-    font-size: 16px;
-    line-height: 1.6;
+/* ========== INPUT ========== */
+input {
+    border-radius: 18px !important;
+    padding: 15px !important;
+    background: rgba(255,255,255,0.9) !important;
+    box-shadow: inset 0 3px 10px rgba(0,0,0,0.1);
 }
 
+/* ========== BUTTON ========== */
 div.stButton > button {
-    background-color: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
     color: white;
-    border-radius: 10px;
-    padding: 10px 22px;
+    border-radius: 18px;
+    padding: 14px 30px;
     font-size: 16px;
+    font-weight: 700;
     border: none;
+    box-shadow: 0 15px 35px rgba(124,58,237,0.45);
+    animation: pulse 2.2s infinite;
 }
+
 div.stButton > button:hover {
-    background-color: #1e40af;
+    transform: translateY(-4px);
+    box-shadow:
+        0 20px 45px rgba(124,58,237,0.6),
+        0 0 35px rgba(124,58,237,0.65);
 }
+
+/* ========== ANSWER CARD ========== */
+.answer-card {
+    background: rgba(248,250,252,0.98);
+    padding: 24px;
+    border-radius: 20px;
+    margin-top: 26px;
+    font-size: 16px;
+    line-height: 1.8;
+    border-left: 6px solid #6366f1;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+    animation: fadeUp 0.6s ease;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideFade {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowText {
+    from { text-shadow: 0 0 10px rgba(124,58,237,0.4); }
+    to { text-shadow: 0 0 22px rgba(124,58,237,0.9); }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.45); }
+    70% { box-shadow: 0 0 0 18px rgba(124,58,237,0); }
+    100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
+}
+
 </style>
 """, unsafe_allow_html=True)
 
